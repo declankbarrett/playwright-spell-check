@@ -9,7 +9,7 @@ test.describe('Digital Service Page Tests', () => {
     await digitalServicePage.navigateToUrl();
     await digitalServicePage.acceptCookies();
   })
-  test('Should perform a spell check on the Homepage', async ({ page }) => {
+  test('Should perform a spell check on the digital-services page', async ({ page }) => {
     let spellchecker = new SpellChecker();
       let misspelledWords = await spellchecker.spellCheck(page, KainosWords);
       await expect(misspelledWords.length).toEqual(0);

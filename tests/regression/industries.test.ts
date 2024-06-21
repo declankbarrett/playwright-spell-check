@@ -9,7 +9,7 @@ test.describe('Industries Page Tests', () => {
     await industriesPage.navigateToUrl();
     await industriesPage.acceptCookies();
   })
-  test('Should perform a spell check on the Homepage', async ({ page }) => {
+  test('Should perform a spell check on the industries page', async ({ page }) => {
     let spellchecker = new SpellChecker();
       let misspelledWords = await spellchecker.spellCheck(page, KainosWords);
       await expect(misspelledWords.length).toEqual(0);
