@@ -54,5 +54,6 @@ export const KainosWords:string[] = [
   'Whimpenny',
   'Whitepaper',
   'wellbeing',
-  'Witherspoon'
+  'Witherspoon',
+  '___'
 ]

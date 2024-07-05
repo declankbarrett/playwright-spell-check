@@ -54,7 +54,7 @@ export class SpellChecker{
 
   // Loads the dictionary in to perform the spellcheck
   private async spellcheckSetup(){
-    const DICT_PATH = path.join(__dirname, 'node_modules', 'dictionary-en-gb');
+    const DICT_PATH = path.join(__dirname, '../node_modules', 'dictionary-en-gb');
     const DICT_AFF = fs.readFileSync(path.join(DICT_PATH, 'index.aff'));
     const DICT_DIC = fs.readFileSync(path.join(DICT_PATH, 'index.dic'));
     const dict = this.spellchecker.parse({ aff: DICT_AFF, dic: DICT_DIC });

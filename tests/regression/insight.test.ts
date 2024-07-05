@@ -1,7 +1,7 @@
 import test, { expect } from "playwright/test";
 import { KainosWords } from "../../utils/kainos-specific-words";
-import { SpellChecker } from "../../spellcheck";
 import { InsightsPage } from "../../pages/insights-page";
+import { SpellChecker } from "../../utils/spellcheck";
 
 test.describe('Insights Page Tests', () => {
   test.beforeEach(async ({ page }) => {

@@ -1,0 +1,27 @@
+{
+  "name": "spell-check-kainos-website",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui"
+    
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.44.1",
+    "@types/jquery": "^3.5.30",
+    "@types/node": "^20.14.5"
+  },
+  "dependencies": {
+    "cspell-dict-en-gb": "^1.2.6",
+    "dictionary-en-gb": "^3.0.0",
+    "hunspell-spellchecker": "^1.0.2",
+    "playwright": "^1.44.1",
+    "simple-spellchecker": "^1.0.2",
+    "typescript": "^5.4.5"
+  }
+}
