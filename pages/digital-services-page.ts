@@ -10,14 +10,4 @@ export class DigitalServicePage extends BasePage{
     this.path = '/digital-services';
     this.acceptCookiesButton = '#ccc-recommended-settings';
   }
-
-
-  async navigateToUrl(){
-    await this.page.goto(this.baseUrl + this.path);
-  }
-
-  async acceptCookies(){
-    await this.page.click(this.acceptCookiesButton);
-  }
-  
 }

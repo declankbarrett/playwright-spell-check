@@ -6,6 +6,7 @@ Creation of a spell check class using playwright to check the spelling of visual
 
 - npm install hunspell-spellchecker
 - npm install dictionary-en-gb
+- npx playwright install
 - Or simply run an npm i (to install all dependencies)
 
 # Running the spellcheck

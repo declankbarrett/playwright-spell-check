@@ -1,59 +1,61 @@
 const HunspellSpellchecker = require('hunspell-spellchecker');
-import fs from "fs"
-import path from 'path'
+import fs from "fs";
+import path from 'path';
 import { Page } from "playwright";
+import { KainosWords } from "./kainos-specific-words"; // Import additional words
 
-export class SpellChecker{
-  private words:string[];
-  private pageContent:string;
+export class SpellChecker {
+  private words: string[];
+  private pageContent: string;
   private spellchecker = new HunspellSpellchecker();
+  private additionalWords: Set<string>; // Use a Set for faster lookups
 
-// Function to check the spelling of the page content
-  async spellCheck(page:Page, additionalWords:string[]){
+  constructor() {
+    this.additionalWords = new Set(KainosWords); // Load additional words once
+  }
+
+  // Function to check the spelling of the page content
+  async spellCheck(page: Page): Promise<string[]> {
     await this.getPageContent(page);
     await this.spellcheckSetup();
     this.words = await this.formatPageContent(this.pageContent);
+
     // Check each word for spelling errors
-    const misspelledWords = this.words.filter(word => (!this.spellchecker.check(word)) !== ((additionalWords.indexOf(word) > -1)));
+    const misspelledWords = this.words.filter(
+      word => !this.spellchecker.check(word) && !this.additionalWords.has(word)
+    );
+
     // Output misspelled words
     if (misspelledWords.length > 0) {
       console.log('Misspelled words:', misspelledWords);
     } else {
       console.log('No misspelled words found.');
     }
-    return misspelledWords;
-  };
 
-  // Gathers the page content in the body of the dom
-  private async getPageContent(page){
-    this.pageContent = await page.evaluate(() => {
-      return document.body.innerText;
-  
-    });
-    // Optional output to console to verify what has been picked up as "pageContent" in the event of mispelled word
-    // *********** console.log(this.pageContent); *****************
+    return misspelledWords;
+  }
+
+  // Gathers the page content in the body of the DOM
+  private async getPageContent(page: Page): Promise<string> {
+    this.pageContent = await page.evaluate(() => document.body.innerText);
     return this.pageContent;
-  };
+  }
 
   // Returns an array of strings for the page content
   private async formatPageContent(input: string): Promise<string[]> {
-    // Step 1: Replace all punctuation with a space, but keep ' if surrounded by letters
+    // Remove numbers and replace punctuation with spaces (except for valid apostrophes)
     const withoutNumbers = input.replace(/\d+/g, '');
-    const processedString = withoutNumbers.replace(/([a-zA-Z])['’]([a-zA-Z])|[^\w\s]/g, (match, p1, p2) => {
-        // If the match is ' surrounded by letters, return it as is
-        if (p1 && p2) return `${p1}'${p2}`;
-        // Otherwise, replace with a space
-        return ' ';
-    });
+    const processedString = withoutNumbers.replace(
+      /([a-zA-Z])['’]([a-zA-Z])|[^\w\s]/g,
+      (match, p1, p2) => (p1 && p2 ? `${p1}'${p2}` : ' ')
+    );
 
-    // Step 2: Split the processed string into an array by spaces
-    const resultArray = processedString.split(/\s+/).filter(word => word.length > 0);
+    // Split the processed string into an array of words
+    return processedString.split(/\s+/).filter(word => word.length > 0);
+  }
 
-    return resultArray;
-  };
-
-  // Loads the dictionary in to perform the spellcheck
-  private async spellcheckSetup(){
+  // Loads the dictionary into memory for spellchecking
+  private async spellcheckSetup(): Promise<void> {
     const DICT_PATH = path.join(__dirname, '../node_modules', 'dictionary-en-gb');
     const DICT_AFF = fs.readFileSync(path.join(DICT_PATH, 'index.aff'));
     const DICT_DIC = fs.readFileSync(path.join(DICT_PATH, 'index.dic'));
@@ -61,5 +63,3 @@ export class SpellChecker{
     this.spellchecker.use(dict);
   }
 }
-
-

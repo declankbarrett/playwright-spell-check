@@ -11,7 +11,7 @@ test.describe('Kainos Home Page Tests', () => {
   })
   test('Should perform a spell check on the homepage', async ({ page }) => {
     let spellchecker = new SpellChecker();
-      let misspelledWords = await spellchecker.spellCheck(page, KainosWords);
+      let misspelledWords = await spellchecker.spellCheck(page);
       await expect(misspelledWords.length).toEqual(0);
     });
 });
